@@ -233,6 +233,10 @@ public class PictureParameterStyle {
      */
     @DrawableRes
     public int pictureWeChatChooseStyle;
+    /**
+     * WeChatStyle 预览右下角 勾选CheckBox大小
+     */
+    public int pictureWeChatChooseSize;
 
     /**
      * WeChatStyle 预览界面返回键样式
@@ -250,6 +254,11 @@ public class PictureParameterStyle {
      * WeChatStyle 自定义预览页右下角选择文字大小
      */
     public int pictureWeChatPreviewSelectedTextSize;
+
+    /**
+     * WeChatStyle 自定义预览页右下角选择文字颜色
+     */
+    public int pictureWeChatPreviewSelectedTextColor;
 
     /**
      * WeChatStyle 自定义预览页右下角选择文字文案
@@ -302,6 +311,16 @@ public class PictureParameterStyle {
      * 标题栏右侧按钮方向箭头left Padding
      */
     public int pictureTitleRightArrowLeftPadding;
+
+    /**
+     * 底部Bar高度
+     */
+    public int pictureBottomBarHeight;
+
+    /**
+     * 底部gallery 选中背景框样式(新样式支持)
+     */
+    public int pictureBottomGalleryFrameBackground;
 
 
     public PictureParameterStyle() {

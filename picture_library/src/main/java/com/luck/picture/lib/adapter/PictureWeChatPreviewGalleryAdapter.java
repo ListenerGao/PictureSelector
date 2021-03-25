@@ -96,6 +96,8 @@ public class PictureWeChatPreviewGalleryAdapter
             viewBorder = itemView.findViewById(R.id.viewBorder);
             if (PictureSelectionConfig.uiStyle != null) {
                 viewBorder.setBackgroundResource(PictureSelectionConfig.uiStyle.picture_bottom_gallery_frameBackground);
+            }else if (PictureSelectionConfig.style != null) {
+                viewBorder.setBackgroundResource(PictureSelectionConfig.style.pictureBottomGalleryFrameBackground);
             }
         }
     }

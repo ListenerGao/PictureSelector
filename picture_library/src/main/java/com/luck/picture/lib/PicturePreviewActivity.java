@@ -24,9 +24,9 @@ import com.luck.picture.lib.adapter.PictureSimpleFragmentAdapter;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.config.PictureSelectionConfig;
-import com.luck.picture.lib.manager.UCropManager;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.listener.OnQueryDataResultListener;
+import com.luck.picture.lib.manager.UCropManager;
 import com.luck.picture.lib.model.LocalMediaPageLoader;
 import com.luck.picture.lib.observable.ImagesObservable;
 import com.luck.picture.lib.tools.AttrsUtils;
@@ -426,6 +426,10 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
             if (PictureSelectionConfig.style.pictureLeftBackIcon != 0) {
                 pictureLeftBack.setImageResource(PictureSelectionConfig.style.pictureLeftBackIcon);
             }
+            if (PictureSelectionConfig.style.pictureBottomBarHeight > 0) {
+                ViewGroup.LayoutParams params = selectBarLayout.getLayoutParams();
+                params.height = PictureSelectionConfig.style.pictureBottomBarHeight;
+            }
             if (PictureSelectionConfig.style.picturePreviewBottomBgColor != 0) {
                 selectBarLayout.setBackgroundColor(PictureSelectionConfig.style.picturePreviewBottomBgColor);
             }
@@ -761,7 +765,9 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
                     }
 
                     if (currentSize >= config.maxSelectNum && !check.isSelected()) {
-                        showPromptDialog(getString(R.string.picture_message_max_num, config.maxSelectNum));
+//                        showPromptDialog(getString(R.string.picture_message_max_num, config.maxSelectNum));
+                        //修改为Toast提示
+                        ToastUtils.s(this, getString(R.string.picture_message_max_num, config.maxSelectNum));
                         return;
                     }
 
@@ -784,7 +790,9 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
                     }
                 } else {
                     if (currentSize >= config.maxSelectNum && !check.isSelected()) {
-                        showPromptDialog(getString(R.string.picture_message_max_num, config.maxSelectNum));
+//                        showPromptDialog(getString(R.string.picture_message_max_num, config.maxSelectNum));
+                        //修改为Toast提示
+                        ToastUtils.s(this, getString(R.string.picture_message_max_num, config.maxSelectNum));
                         return;
                     }
                 }
@@ -817,7 +825,9 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
                     }
                 } else {
                     if (currentSize >= config.maxSelectNum && !check.isSelected()) {
-                        showPromptDialog(StringUtils.getMsg(getContext(), mimeType, config.maxSelectNum));
+//                        showPromptDialog(StringUtils.getMsg(getContext(), mimeType, config.maxSelectNum));
+                        //修改为Toast提示
+                        ToastUtils.s(this, getString(R.string.picture_message_max_num, config.maxSelectNum));
                         return;
                     }
                     if (PictureMimeType.isHasVideo(image.getMimeType())) {

@@ -465,6 +465,10 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             if (PictureSelectionConfig.style.pictureCompleteTextSize != 0) {
                 mTvPictureOk.setTextSize(PictureSelectionConfig.style.pictureCompleteTextSize);
             }
+            if (PictureSelectionConfig.style.pictureBottomBarHeight > 0) {
+                ViewGroup.LayoutParams params = mBottomLayout.getLayoutParams();
+                params.height = PictureSelectionConfig.style.pictureBottomBarHeight;
+            }
             if (PictureSelectionConfig.style.pictureBottomBgColor != 0) {
                 mBottomLayout.setBackgroundColor(PictureSelectionConfig.style.pictureBottomBgColor);
             }
