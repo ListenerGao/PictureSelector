@@ -56,6 +56,10 @@ public class PictureParameterStyle {
      */
     @ColorInt
     public int pictureTitleTextColor;
+    /**
+     * 选取相册预览页面标题字体大小
+     */
+    public int picturePreviewTitleTextSize;
 
     /**
      * 相册标题字体大小

@@ -209,6 +209,10 @@ public class PictureSelectorPreviewWeChatStyleActivity extends PicturePreviewAct
             if (PictureSelectionConfig.style.pictureWeChatPreviewSelectedTextColor != 0) {
                 mTvSelected.setTextColor(PictureSelectionConfig.style.pictureWeChatPreviewSelectedTextColor);
             }
+            // 可以单独设置选取相册时预览页面标题字体大小
+            if (PictureSelectionConfig.style.picturePreviewTitleTextSize != 0) {
+                tvTitle.setTextSize(PictureSelectionConfig.style.picturePreviewTitleTextSize);
+            }
             if (PictureSelectionConfig.style.picturePreviewBottomBgColor != 0) {
                 selectBarLayout.setBackgroundColor(PictureSelectionConfig.style.picturePreviewBottomBgColor);
             } else {
