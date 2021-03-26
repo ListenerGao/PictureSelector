@@ -291,6 +291,8 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                                     boolean isEmpty = mAdapter.isDataEmpty();
                                     if (isEmpty) {
                                         showDataNull(bucketId == -1 ? getString(R.string.picture_empty) : getString(R.string.picture_data_null), R.drawable.picture_icon_no_data);
+                                    } else {
+                                        mTvEmpty.setVisibility(View.GONE);
                                     }
                                 }
                             }
@@ -1607,7 +1609,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             mTvPicturePreview.setEnabled(true);
             mTvPicturePreview.setSelected(true);
             if (PictureSelectionConfig.uiStyle != null) {
-                if (PictureSelectionConfig.uiStyle.picture_bottom_previewNormalText !=0) {
+                if (PictureSelectionConfig.uiStyle.picture_bottom_previewNormalText != 0) {
                     if (PictureSelectionConfig.uiStyle.isCompleteReplaceNum) {
                         mTvPicturePreview.setText(String.format(getString(PictureSelectionConfig.uiStyle.picture_bottom_previewNormalText), selectData.size()));
                     } else {
@@ -1639,7 +1641,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 mTvPictureImgNum.setVisibility(View.VISIBLE);
                 mTvPictureImgNum.setText(String.valueOf(selectData.size()));
                 if (PictureSelectionConfig.uiStyle != null) {
-                    if (PictureSelectionConfig.uiStyle.picture_bottom_completeNormalText !=0) {
+                    if (PictureSelectionConfig.uiStyle.picture_bottom_completeNormalText != 0) {
                         mTvPictureOk.setText(getString(PictureSelectionConfig.uiStyle.picture_bottom_completeNormalText));
                     }
                 } else if (PictureSelectionConfig.style != null) {
@@ -1657,7 +1659,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             mTvPicturePreview.setEnabled(false);
             mTvPicturePreview.setSelected(false);
             if (PictureSelectionConfig.uiStyle != null) {
-                if (PictureSelectionConfig.uiStyle.picture_bottom_previewDefaultText !=0) {
+                if (PictureSelectionConfig.uiStyle.picture_bottom_previewDefaultText != 0) {
                     mTvPicturePreview.setText(getString(PictureSelectionConfig.uiStyle.picture_bottom_previewDefaultText));
                 } else {
                     mTvPicturePreview.setText(getString(R.string.picture_preview));
@@ -1681,7 +1683,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             } else {
                 mTvPictureImgNum.setVisibility(View.INVISIBLE);
                 if (PictureSelectionConfig.uiStyle != null) {
-                    if (PictureSelectionConfig.uiStyle.picture_bottom_completeDefaultText !=0) {
+                    if (PictureSelectionConfig.uiStyle.picture_bottom_completeDefaultText != 0) {
                         mTvPictureOk.setText(getString(PictureSelectionConfig.uiStyle.picture_bottom_completeDefaultText));
                     }
                 } else if (PictureSelectionConfig.style != null) {

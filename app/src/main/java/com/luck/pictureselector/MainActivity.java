@@ -457,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .isWeChatStyle(isWeChatStyle)// 是否开启微信图片选择风格
                         .isUseCustomCamera(cb_custom_camera.isChecked())// 是否使用自定义相机
                         .setLanguage(language)// 设置语言，默认中文
-                        .isPageStrategy(cbPage.isChecked())// 是否开启分页策略 & 每页多少条；默认开启
+                        .isPageStrategy(cbPage.isChecked(), true)// 是否开启分页策略 & 每页多少条；默认开启
                         .setRecyclerAnimationMode(animationMode)// 列表动画效果
                         .isWithVideoImage(true)// 图片和视频是否可以同选,只在ofAll模式下有效
                         .isMaxSelectEnabledMask(cbEnabledMask.isChecked())// 选择数到了最大阀值列表是否启用蒙层效果
