@@ -37,7 +37,6 @@ import com.luck.picture.lib.animators.SlideInBottomAnimationAdapter;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.config.PictureSelectionConfig;
-import com.luck.picture.lib.manager.UCropManager;
 import com.luck.picture.lib.decoration.GridSpacingItemDecoration;
 import com.luck.picture.lib.dialog.PhotoItemSelectedDialog;
 import com.luck.picture.lib.dialog.PictureCustomDialog;
@@ -48,6 +47,7 @@ import com.luck.picture.lib.listener.OnItemClickListener;
 import com.luck.picture.lib.listener.OnPhotoSelectChangedListener;
 import com.luck.picture.lib.listener.OnQueryDataResultListener;
 import com.luck.picture.lib.listener.OnRecyclerViewPreloadMoreListener;
+import com.luck.picture.lib.manager.UCropManager;
 import com.luck.picture.lib.model.LocalMediaLoader;
 import com.luck.picture.lib.model.LocalMediaPageLoader;
 import com.luck.picture.lib.observable.ImagesObservable;
@@ -93,6 +93,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     protected TextView mTvPictureTitle, mTvPictureRight, mTvPictureOk, mTvEmpty,
             mTvPictureImgNum, mTvPicturePreview, mTvPlayPause, mTvStop, mTvQuit,
             mTvMusicStatus, mTvMusicTotal, mTvMusicTime;
+    protected ImageView mIvEmpty;
     protected RecyclerPreloadView mRecyclerView;
     protected RelativeLayout mBottomLayout;
     protected PictureImageGridAdapter mAdapter;
@@ -171,6 +172,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         mRecyclerView = findViewById(R.id.picture_recycler);
         mBottomLayout = findViewById(R.id.select_bar_layout);
         mTvEmpty = findViewById(R.id.tv_empty);
+        mIvEmpty = findViewById(R.id.iv_empty);
         isNumComplete(numComplete);
         if (!numComplete) {
             animation = AnimationUtils.loadAnimation(this, R.anim.picture_anim_modal_in);
@@ -292,7 +294,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                                     if (isEmpty) {
                                         showDataNull(bucketId == -1 ? getString(R.string.picture_empty) : getString(R.string.picture_data_null), R.drawable.picture_icon_no_data);
                                     } else {
-                                        mTvEmpty.setVisibility(View.GONE);
+                                        hideDataNull();
                                     }
                                 }
                             }
@@ -436,6 +438,14 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             }
             if (PictureSelectionConfig.style.pictureTitleTextSize != 0) {
                 mTvPictureTitle.setTextSize(PictureSelectionConfig.style.pictureTitleTextSize);
+            }
+
+            if (PictureSelectionConfig.style.pictureEmptyDataTextSize != 0) {
+                mTvEmpty.setTextSize(PictureSelectionConfig.style.pictureEmptyDataTextSize);
+            }
+
+            if (PictureSelectionConfig.style.pictureEmptyDataTextColor != 0) {
+                mTvEmpty.setTextColor(PictureSelectionConfig.style.pictureEmptyDataTextColor);
             }
 
             if (PictureSelectionConfig.style.pictureRightDefaultTextColor != 0) {
@@ -2505,9 +2515,11 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
      */
     private void showDataNull(String msg, int topErrorResId) {
         if (mTvEmpty.getVisibility() == View.GONE || mTvEmpty.getVisibility() == View.INVISIBLE) {
-            mTvEmpty.setCompoundDrawablesRelativeWithIntrinsicBounds(0, topErrorResId, 0, 0);
-            mTvEmpty.setText(msg);
+//            mTvEmpty.setCompoundDrawablesRelativeWithIntrinsicBounds(0, topErrorResId, 0, 0);
+            mTvEmpty.setText(TextUtils.isEmpty(getNoDataMsg()) ? msg : getNoDataMsg());
             mTvEmpty.setVisibility(View.VISIBLE);
+            mIvEmpty.setImageResource(getNoDataImage() == 0 ? topErrorResId : getNoDataImage());
+            mIvEmpty.setVisibility(View.VISIBLE);
         }
     }
 
@@ -2518,5 +2530,25 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
         if (mTvEmpty.getVisibility() == View.VISIBLE) {
             mTvEmpty.setVisibility(View.GONE);
         }
+        if (mIvEmpty.getVisibility() == View.VISIBLE) {
+            mIvEmpty.setVisibility(View.GONE);
+        }
     }
+
+    private String getNoDataMsg() {
+        String msg = "";
+        if (PictureSelectionConfig.style != null) {
+            msg = PictureSelectionConfig.style.pictureEmptyDataText;
+        }
+        return msg;
+    }
+
+    private int getNoDataImage() {
+        int resId = 0;
+        if (PictureSelectionConfig.style != null) {
+            resId = PictureSelectionConfig.style.pictureEmptyDataImage;
+        }
+        return resId;
+    }
+
 }

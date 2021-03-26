@@ -325,6 +325,26 @@ public class PictureParameterStyle {
      * 底部gallery 选中背景框样式(新样式支持)
      */
     public int pictureBottomGalleryFrameBackground;
+    /**
+     * 没有数据时，展示的图标
+     */
+    @DrawableRes
+    public int pictureEmptyDataImage;
+
+    /**
+     * 没有数据时，展示的文案
+     */
+    public String pictureEmptyDataText;
+
+    /**
+     * 没有数据时，展示的文案字体大小
+     */
+    public int pictureEmptyDataTextSize;
+
+    /**
+     * 没有数据时，展示的文案字体颜色
+     */
+    public int pictureEmptyDataTextColor;
 
 
     public PictureParameterStyle() {
