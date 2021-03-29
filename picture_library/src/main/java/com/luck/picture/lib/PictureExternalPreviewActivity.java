@@ -25,8 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.luck.picture.lib.broadcast.BroadcastAction;
-import com.luck.picture.lib.broadcast.BroadcastManager;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.config.PictureSelectionConfig;
@@ -156,12 +154,21 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
                 tvTitle.setText(getString(R.string.picture_preview_image_num,
                         index + 1, images.size()));
                 position = index;
+
+                downloadPath = getImagePath();
+                mMimeType = getMimeType();
+                Log.d("gys", "onPageSelected   downloadPath:" + downloadPath + "  mMimeType:" + mMimeType);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
+
+        //首次进来，初始化downloadPath以及mMimeType
+        downloadPath = getImagePath();
+        mMimeType = getMimeType();
+        Log.d("gys", "first   downloadPath:" + downloadPath + "  mMimeType:" + mMimeType);
     }
 
     @Override
@@ -284,7 +291,7 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
                 ivPlay.setVisibility(isHasVideo ? View.VISIBLE : View.GONE);
                 boolean isGif = PictureMimeType.isGif(mimeType);
                 boolean eqLongImg = MediaUtils.isLongImg(media);
-                Log.d("gys", "isGif:"+isGif+"  eqLongImg:"+eqLongImg);
+                Log.d("gys", "isGif:" + isGif + "  eqLongImg:" + eqLongImg);
                 imageView.setVisibility(eqLongImg && !isGif ? View.GONE : View.VISIBLE);
                 longImageView.setVisibility(eqLongImg && !isGif ? View.VISIBLE : View.GONE);
                 // 压缩过的gif就不是gif了
@@ -331,17 +338,14 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
                     exitAnimation();
                 });
 
-                downloadPath = path;
-                String currentMimeType = PictureMimeType.isHasHttp(path) ? PictureMimeType.getImageMimeType(media.getPath()) : media.getMimeType();
-                mMimeType = PictureMimeType.isJPG(currentMimeType) ? PictureMimeType.MIME_TYPE_JPEG : currentMimeType;
-
                 if (!isHasVideo) {
                     longImageView.setOnLongClickListener(v -> {
                         if (config.isNotPreviewDownload) {
                             if (PermissionChecker.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                                downloadPath = path;
-//                                String currentMimeType = PictureMimeType.isHasHttp(path) ? PictureMimeType.getImageMimeType(media.getPath()) : media.getMimeType();
-//                                mMimeType = PictureMimeType.isJPG(currentMimeType) ? PictureMimeType.MIME_TYPE_JPEG : currentMimeType;
+                                downloadPath = path;
+                                String currentMimeType = PictureMimeType.isHasHttp(path) ? PictureMimeType.getImageMimeType(media.getPath()) : media.getMimeType();
+                                mMimeType = PictureMimeType.isJPG(currentMimeType) ? PictureMimeType.MIME_TYPE_JPEG : currentMimeType;
+                                Log.d("gys", "11111downloadPath:" + downloadPath);
                                 showDownLoadDialog();
                             } else {
                                 PermissionChecker.requestPermissions(PictureExternalPreviewActivity.this,
@@ -355,9 +359,10 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
                     imageView.setOnLongClickListener(v -> {
                         if (config.isNotPreviewDownload) {
                             if (PermissionChecker.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                                downloadPath = path;
-//                                String currentMimeType = PictureMimeType.isHasHttp(path) ? PictureMimeType.getImageMimeType(media.getPath()) : media.getMimeType();
-//                                mMimeType = PictureMimeType.isJPG(currentMimeType) ? PictureMimeType.MIME_TYPE_JPEG : currentMimeType;
+                                downloadPath = path;
+                                String currentMimeType = PictureMimeType.isHasHttp(path) ? PictureMimeType.getImageMimeType(media.getPath()) : media.getMimeType();
+                                mMimeType = PictureMimeType.isJPG(currentMimeType) ? PictureMimeType.MIME_TYPE_JPEG : currentMimeType;
+                                Log.d("gys", "22222downloadPath:" + downloadPath);
                                 showDownLoadDialog();
                             } else {
                                 PermissionChecker.requestPermissions(PictureExternalPreviewActivity.this,
@@ -385,6 +390,56 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
     }
 
     /**
+     * 获取当前LocalMedia
+     *
+     * @return
+     */
+    private LocalMedia getLocalMedia() {
+        if (images != null && images.size() > 0) {
+            return images.get(position);
+        }
+        return new LocalMedia();
+    }
+
+    /**
+     * 获取当前图片路径
+     *
+     * @return
+     */
+    private String getImagePath() {
+        String path = "";
+        LocalMedia media = getLocalMedia();
+        if (media != null) {
+            if (media.isCut() && !media.isCompressed()) {
+                // 裁剪过
+                path = media.getCutPath();
+            } else if (media.isCompressed() || (media.isCut() && media.isCompressed())) {
+                // 压缩过,或者裁剪同时压缩过,以最终压缩过图片为准
+                path = media.getCompressPath();
+            } else if (!TextUtils.isEmpty(media.getAndroidQToPath())) {
+                // AndroidQ特有path
+                path = media.getAndroidQToPath();
+            } else {
+                // 原图
+                path = media.getPath();
+            }
+        }
+        return path;
+    }
+
+    /**
+     * 获取当前图片类型
+     *
+     * @return
+     */
+    private String getMimeType() {
+        LocalMedia media = getLocalMedia();
+        String currentMimeType = PictureMimeType.isHasHttp(getImagePath()) ? PictureMimeType.getImageMimeType(media.getPath()) : media.getMimeType();
+        return PictureMimeType.isJPG(currentMimeType) ? PictureMimeType.MIME_TYPE_JPEG : currentMimeType;
+    }
+
+
+    /**
      * 加载长图
      *
      * @param uri
@@ -404,7 +459,7 @@ public class PictureExternalPreviewActivity extends PictureBaseActivity implemen
      */
     private void saveImage() {
         if (!isFinishing() && !TextUtils.isEmpty(downloadPath)) {
-            Log.d("gys", "downloadPath: "+downloadPath);
+            Log.d("gys", "downloadPath: " + downloadPath);
             boolean isHttp = PictureMimeType.isHasHttp(downloadPath);
 //            showPleaseDialog();
             if (isHttp) {

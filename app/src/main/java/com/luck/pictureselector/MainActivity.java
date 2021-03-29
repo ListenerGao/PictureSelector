@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         LocalMedia media1 = new LocalMedia();
                         media1.setPath(path);
                         LocalMedia media2 = new LocalMedia();
-                        media2.setPath(path);
+                        media2.setPath("/storage/emulated/0/internalDisk/截屏/20200520113218.png");
                         LocalMedia media3 = new LocalMedia();
                         media3.setPath("http://storage.360buyimg.com/i.imageUpload/b8dfd1c7c9ea31343333353831393430313332_big.jpg");
                         List<LocalMedia> images = new ArrayList<>();
